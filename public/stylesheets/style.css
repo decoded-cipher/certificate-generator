@@ -1,0 +1,20 @@
+* {
+    font-family: 'Raleway', sans-serif;
+}
+
+.certificate img {
+    width: 100%;
+    border: 2px #8acecf solid;
+}
+
+.details {
+    text-align: center;
+}
+
+.text-bottom p, span {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.text {
+    margin-top: 60px;
+}
