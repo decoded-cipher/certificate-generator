@@ -6,6 +6,7 @@ const { GoogleApis } = require('googleapis');
 var { google } = require('googleapis')
 var keys = require('./keys.json')
 
+var parseData = {}
 var client = new google.auth.JWT(
     keys.client_email,
     null,
@@ -33,7 +34,7 @@ var client = new google.auth.JWT(
     var opt = {
         // spreadsheetId: '1_hcPk66kmbzlE0hXLmkcn2u-XBCvjibqFsS29ncD1HE',
         spreadsheetId: process.env.SPREADSHEET_ID,
-        range: 'Sheet1!A1:C'
+        range: 'Sheet1!A:C'
     }
     
     var sheetData = await api.spreadsheets.values.get(opt);
@@ -49,7 +50,9 @@ var client = new google.auth.JWT(
         return object;
     });
     
-    console.log(JSON.parse(JSON.stringify(objects)));
+    parseData = JSON.parse(JSON.stringify(objects));
+    // console.log(parseData);
+    // console.log(parseData[0].CertificateId);
     
 }
 
@@ -70,8 +73,21 @@ app.engine('hbs', hbs({
 
 app.use(express.static(__dirname, +'public'));
 
-app.get('/id/1', (req, res) => {
-    res.render('home');
+app.get('/id/:id', (req, res) => {
+    // console.log(req.params.id);
+    // console.log(parseData)
+    // console.log(parseData[0].CertificateId);
+
+    var CertificateData = []
+    for (var j = 0; j < parseData.length; j++){
+            if (req.params.id == parseData[j].CertificateId) {
+                CertificateData = parseData[j]
+                CertificateData.CertificateLink = 'https://docs.google.com/uc?id=' + CertificateData.CertificateLink.split('=')[1]
+                console.log(CertificateData);
+            }
+        }
+
+    res.render('home', CertificateData);
 });
 
 app.listen(3000);
