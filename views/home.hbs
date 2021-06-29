@@ -12,20 +12,19 @@
         <div class="col-lg-4 col-sm-12 details">
             <div class="text">
                 <div class="text-top">
-                    <h2>WEB DESIGN BOOTCAMP</h2>
-                    <h5>Web Design for Absolute Beginners</h5>
+                    <h2>{{this.Title}}</h2>
+                    <h5>{{this.SubTitle}}</h5>
                     <br>
                     <h4>Successfully completed by</h4>
                     <h1>{{this.CandidateName}}</h1>
                 </div>
                 <br>
                 <div class="text-bottom">
-                    <p>2 Weeks of Study <br> 1 Week Learning & 1 Week Assignment</p>
-                    <p>Dated : <b>29th March 2021</b> <br> Credential : <b>{{this.CertificateId}}</b></p></p>
+                    <p>{{this.Duration}} <br> {{this.DurationDesc}}</p>
+                    <p>Dated : <b>{{this.CertificateDate}}</b> <br> Credential : <b>{{this.CertificateId}}</b></p></p>
                     <br>
                     <span><b>{{this.CandidateName}}'s</b> certificate is verified. <br>
-                        Inovus Labs IEDC certifies their successful completion of 'Web Design for Absolute Beginners'
-                        Learning Program</span>
+                        Inovus Labs IEDC certifies their successful completion of <b>'{{this.SubTitle}}'</b></span>
                 </div>
             </div>
         </div>

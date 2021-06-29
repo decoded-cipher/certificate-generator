@@ -6,7 +6,9 @@ const { GoogleApis } = require('googleapis');
 var { google } = require('googleapis')
 var keys = require('./keys.json')
 
-var parseData = {}
+var parseData = {};
+var parseData_1 = {};
+
 var client = new google.auth.JWT(
     keys.client_email,
     null,
@@ -32,27 +34,45 @@ var client = new google.auth.JWT(
     })
     
     var opt = {
-        // spreadsheetId: '1_hcPk66kmbzlE0hXLmkcn2u-XBCvjibqFsS29ncD1HE',
         spreadsheetId: process.env.SPREADSHEET_ID,
-        range: 'Sheet1!A:C'
+        range: 'Data!A:D'
+    }
+
+    var opt_1 = {
+        spreadsheetId: process.env.SPREADSHEET_ID,
+        range: 'Events!A:F'
     }
     
     var sheetData = await api.spreadsheets.values.get(opt);
     var data = sheetData.data.values;
     // console.log(data);
-    
+    var sheetData_1 = await api.spreadsheets.values.get(opt_1);
+    var data_1 = sheetData_1.data.values;
+    // console.log(data_1);
+
     const keys = data[0];
     const values = data.slice(1);
     const objects = values.map(array => {
         const object = {};
-        
         keys.forEach((key, i) => object[key] = array[i]);
         return object;
     });
     
+    const keys_1 = data_1[0];
+    const values_1 = data_1.slice(1);
+    const objects_1 = values_1.map(array_1 => {
+        const object_1 = {};
+        keys_1.forEach((key_1, i) => object_1[key_1] = array_1[i]);
+        return object_1;
+    });
+    
     parseData = JSON.parse(JSON.stringify(objects));
     // console.log(parseData);
-    // console.log(parseData[0].CertificateId);
+    // console.log(parseData[0].EventId);
+    
+    parseData_1 = JSON.parse(JSON.stringify(objects_1));
+    // console.log(parseData_1);
+    // console.log(parseData_1[0].EventId);
     
 }
 
@@ -79,11 +99,21 @@ app.get('/id/:id', (req, res) => {
     // console.log(parseData[0].CertificateId);
 
     var CertificateData = []
-    for (var j = 0; j < parseData.length; j++){
+    var EventData = []
+    for (var j = 0; j < parseData.length; j++) {
             if (req.params.id == parseData[j].CertificateId) {
                 CertificateData = parseData[j]
                 CertificateData.CertificateLink = 'https://docs.google.com/uc?id=' + CertificateData.CertificateLink.split('=')[1]
-                console.log(CertificateData);
+                // console.log(CertificateData);
+
+                for (var i = 0; i < parseData_1.length; i++) {
+                    if (parseData[j].EventId == parseData_1[i].EventId) {
+                        EventData = parseData_1[i]
+                        // CertificateData.merge(EventData)
+                        Object.assign(CertificateData, EventData)
+                        console.log(CertificateData);
+                    }
+                }
             }
         }
 
